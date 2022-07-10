@@ -9,10 +9,11 @@ var moviesRouter = require("./routes/movies");
 
 var app = express();
 
+require('dotenv').config();
+
 var mongoose = require("mongoose");
 //Al usar @ hay que cambiarlo por código hexadecimal
-const uri =
-  "mongodb+srv://fperalta:%40Francops1996@cluster0.93kgf.mongodb.net/dbcinema?retryWrites=true&w=majority";
+const uri = process.env.DB_URI;
 
 mongoose
   .connect(uri, {
