@@ -1,6 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
+var mongoose = require("mongoose");
+var Movie = require("../models/Movie");
+
 /* GET movies listing. */
 router.get("/", function (req, res, next) {
   res.send("GET all movies");
@@ -13,12 +16,17 @@ router.get("/:id", function (req, res, next) {
 
 /* POST */
 router.post("/", function (req, res, next) {
-  res.send("POST the movie with the title => " + req.body.title);
+  //Utilizamos el modelo que creamos, el create es equivalente a POST
+  Movie.create(req.body, function (err, movieInfo) {
+    err ? res.status(500).send(err) : res.sendStatus(200);
+  });
 });
 
 /* PUT */
 router.put("/:id", function (req, res, next) {
-  res.send("PUT the movie => " + req.params.id);
+  Movie.findByIdAndUpdate(req.params.id, req.body, function (err, movieInfo) {
+    err ? res.status(500).send(err) : res.sendStatus(200);
+  });
 });
 
 /* DELETE */
