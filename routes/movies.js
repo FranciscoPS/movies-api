@@ -5,33 +5,41 @@ var mongoose = require("mongoose");
 var Movie = require("../models/Movie");
 
 /* GET movies listing. */
-router.get("/", function (req, res, next) {
-  res.send("GET all movies");
+router.get("/", (req, res, next) => {
+  //Indicamos que se ordene Decrecientemente por año
+  Movie.find()
+    .sort("-year")
+    .exec((err, movies) => {
+      err ? res.status(500).send(err) : res.status(200).json(movies);
+    });
 });
 
 /* GET the movie identified by id. */
-router.get("/:id", function (req, res, next) {
-  res.send("GET the movie => " + req.params.id);
+router.get("/:id", (req, res, next) => {
+  Movie.findById(req.params.id, (err, movies) => {
+    err ? res.status(500).send(err) : res.status(200).json(movies);
+  });
 });
 
 /* POST */
-router.post("/", function (req, res, next) {
-  //Utilizamos el modelo que creamos, el create es equivalente a POST
-  Movie.create(req.body, function (err, movieInfo) {
+router.post("/", (req, res, next) => {
+  Movie.create(req.body, (err, movieInfo) => {
     err ? res.status(500).send(err) : res.sendStatus(200);
   });
 });
 
 /* PUT */
-router.put("/:id", function (req, res, next) {
-  Movie.findByIdAndUpdate(req.params.id, req.body, function (err, movieInfo) {
+router.put("/:id", (req, res, next) => {
+  Movie.findByIdAndUpdate(req.params.id, req.body, (err, movieInfo) => {
     err ? res.status(500).send(err) : res.sendStatus(200);
   });
 });
 
 /* DELETE */
-router.delete("/:id", function (req, res, next) {
-  res.send("DELETE the movie => " + req.params.id);
+router.delete("/:id", (req, res, next) => {
+  Movie.findByIdAndDelete(req.params.id, req.body, (err, movieInfo) => {
+    err ? res.status(500).send(err) : res.sendStatus(200);
+  });
 });
 
 module.exports = router;
