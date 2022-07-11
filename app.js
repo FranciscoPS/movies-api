@@ -7,9 +7,11 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var moviesRouter = require("./routes/movies");
 
+var cors = require("cors");
+
 var app = express();
 
-require('dotenv').config();
+require("dotenv").config();
 
 var mongoose = require("mongoose");
 //Al usar @ hay que cambiarlo por código hexadecimal
@@ -18,7 +20,7 @@ const uri = process.env.DB_URI;
 mongoose
   .connect(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => console.log("dbcinema connection successful"))
   .catch((err) => console.error(`ERROR ===> ${err}`));
@@ -35,6 +37,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/movies", moviesRouter);
+
+app.use(cors());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
